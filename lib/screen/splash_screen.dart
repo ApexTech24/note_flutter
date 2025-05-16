@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import '../routes/routes.dart';
 
 class SplashScreen extends StatefulWidget{
   const SplashScreen({super.key});
@@ -12,7 +14,7 @@ class _SplashScreen extends State<SplashScreen>{
   void initState(){
     super.initState();
     Future.delayed(const Duration(seconds: 3),(){
-
+      Get.offAllNamed(Routes.loginScreen);
     });
   }
 
