@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../controller/login_controller.dart';
+import '../routes/routes.dart';
 import '../widgets/remember_me_widget.dart';
 
 
@@ -13,9 +14,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
   late final LoginController loginController;
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState(){
@@ -32,53 +32,59 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: ListView(
-          children: [
-            const Text('Login',
-            style: TextStyle(
-              fontSize: 24.0,
-              fontWeight: FontWeight.bold,
-            ),
-            ),
-            const SizedBox(
-              height: 50.0,
-            ),
-            TextField(
-              controller: emailController,
-              decoration: const InputDecoration(
-                labelText: 'Email',
-                border: OutlineInputBorder(),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              const Text('Login',
+                style: TextStyle(
+                  fontSize: 24.0,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              keyboardType: TextInputType.emailAddress,
-            ),
-            const SizedBox(
-              height: 16.0,
-            ),
-            TextField(
-              controller: passwordController,
-              decoration: const InputDecoration(
-                labelText: 'Password',
-                border: OutlineInputBorder(),
+              const SizedBox(
+                height: 50.0,
               ),
-              obscureText: true,
-            ),
-            const SizedBox(
-              height: 16.0,
-            ),
-            RememberMeWidget(),
+              TextFormField(
+                controller: loginController.email,
+                decoration: const InputDecoration(
+                  labelText: 'Email',
+                  border: OutlineInputBorder(),
+                ),
+                keyboardType: TextInputType.emailAddress,
+              ),
+              const SizedBox(
+                height: 16.0,
+              ),
+              TextFormField(
+                controller: loginController.password,
+                decoration: const InputDecoration(
+                  labelText: 'Password',
+                  border: OutlineInputBorder(),
+                ),
+                obscureText: true,
+              ),
+              const SizedBox(
+                height: 16.0,
+              ),
+              RememberMeWidget(),
 
-            FilledButton(onPressed: () {
-              final String email= emailController.text;
-              final String password= passwordController.text;
+              FilledButton(onPressed: () {
+                if(_formKey.currentState!.validate()){
+                  LoginController.instance.loginUser(loginController.email.text.trim(), loginController.password.text.trim());
+                }
+              }, child: const Text("Login")),
+              const SizedBox(
+                height: 16.0,
+              ),
+              SizedBox(
+                width: double.infinity, child: OutlinedButton(onPressed: (){
+                Get.offAllNamed(Routes.signupScreen);
+              }, child: const Text("Create Account")),
+              ),
+            ],
+          ),
 
-            }, child: const Text("Login")),
-            const SizedBox(
-              height: 16.0,
-            ),
-            SizedBox(
-              width: double.infinity, child: OutlinedButton(onPressed: (){}, child: const Text("Create Account")),
-            ),
-          ],
         ),
       ),
     );
